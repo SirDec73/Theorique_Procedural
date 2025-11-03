@@ -413,7 +413,7 @@ MonoBehaviour:
   _generationMethod: {fileID: 11400000, guid: 6d039395dd02e94468596c445c26d26a, type: 2}
   _drawDebug: 0
   _seed: 1234
-  _stepDelay: 200
+  _stepDelay: 100
 --- !u!4 &1922166660
 Transform:
   m_ObjectHideFlags: 0
