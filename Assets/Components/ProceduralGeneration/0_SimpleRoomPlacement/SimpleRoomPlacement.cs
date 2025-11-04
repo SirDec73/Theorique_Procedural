@@ -98,12 +98,12 @@ namespace Components.ProceduralGeneration.SimpleRoomPlacement
             for (int x = 0; x < Mathf.Abs(distanceX); x++)
             {
                 Grid.TryGetCellByCoordinates((int)room1.x + x*directionX, (int)room1.y, out var cell);
-                AddTileToCell(cell, CORRIDOR_TILE_NAME, true);
+                AddTileToCell(cell, CORRIDOR_TILE_NAME, false);
             }
             for (int y = 0; y < Mathf.Abs(distanceY); y++)
             {
                 Grid.TryGetCellByCoordinates((int)room1.x + (int)distanceX, (int)room1.y + y * directionY, out var cell);
-                AddTileToCell(cell, CORRIDOR_TILE_NAME, true);
+                AddTileToCell(cell, CORRIDOR_TILE_NAME, false);
             }
         }
 
