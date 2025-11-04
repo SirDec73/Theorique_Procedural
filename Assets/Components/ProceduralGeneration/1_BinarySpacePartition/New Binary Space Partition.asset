@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: New Binary Space Partition
   m_EditorClassIdentifier: 
   _maxSteps: 10
-  _partition: 1
+  _partition: 4
