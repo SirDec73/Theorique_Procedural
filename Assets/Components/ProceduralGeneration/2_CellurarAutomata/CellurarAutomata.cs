@@ -34,24 +34,22 @@ public class CellurarAutomata : ProceduralGenerationMethod
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            List<List<string>> tmpGrid = new List<List<string>>();
-
-            for (int y = 0; y < Grid.Lenght; y++)
-            {
-                tmpGrid.Add(new List<string>());
-                for (int x = 0; x < Grid.Width; x++)
-                { 
-                    string tile = CheckAndAssignNewTile(x, y);
-                    tmpGrid[y].Add(tile);
-                }
-            }
+            List <(string,int,int)> tmpGrid = new List<(string, int, int)>();
 
             for (int y = 0; y < Grid.Lenght; y++)
             {
                 for (int x = 0; x < Grid.Width; x++)
                 {
-                    AssignNewType(x, y, tmpGrid[y][x]);
+                    (string, int, int) tile = (CheckAndAssignNewTile(x, y),x,y);
+                    if (IsGroundName(tile.Item2,tile.Item3,tile.Item1))
+                        continue;
+                    tmpGrid.Add(tile);
                 }
+            }
+
+            foreach(var tmp in tmpGrid)
+            {
+                AssignNewType(tmp.Item2, tmp.Item3, tmp.Item1);
             }
 
             await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
@@ -146,6 +144,12 @@ public class CellurarAutomata : ProceduralGenerationMethod
     {
         Grid.TryGetCellByCoordinates(posX, posY, out var cell);
         AddTileToCell(cell, tileName, true);
+    }
+
+    bool IsGroundName(int posX, int posY, string tileName)
+    {
+        Grid.TryGetCellByCoordinates(posX, posY, out var cell);
+        return cell.GridObject.Template.Name == tileName;
     }
 
 }
