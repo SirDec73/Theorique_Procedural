@@ -35,5 +35,11 @@ namespace VTools.Grid
             GridObject.SetGridData(cell, grid);
             MoveTo(cell.GetCenterPosition(grid.OriginPosition));
         }
+
+        public void SwapSprite(Sprite sprite)
+        {
+            if(TryGetComponent(out SpriteRenderer sRender))
+                sRender.sprite = sprite;
+        }
     }
 }

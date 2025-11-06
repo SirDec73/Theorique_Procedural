@@ -15,9 +15,9 @@ public class BinarySpacePartition : ProceduralGenerationMethod
 {
     [SerializeField] int _partition;
 
-    [NonSerialized]int spacing = 1;
+    //[NonSerialized]int spacing = 1;
     [NonSerialized]int minSize = 5;
-    [NonSerialized]int maxSize = 12;
+    //[NonSerialized]int maxSize = 12;
 
     protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
     {

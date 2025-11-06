@@ -103,5 +103,13 @@ namespace Components.ProceduralGeneration
             var tileTemplate = ScriptableObjectDatabase.GetScriptableObject<GridObjectTemplate>(tileName);
             GridGenerator.AddGridObjectToCell(cell, tileTemplate, overrideExistingObjects);
         }
+
+        // ------------------------------------------ Add by ME ----------------------------------------------- //
+
+        protected void SwapCellSprite(Cell cell, string tileName)
+        {
+            var tileTemplate = ScriptableObjectDatabase.GetScriptableObject<GridObjectTemplate>(tileName);
+
+        }
     }
 }
