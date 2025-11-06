@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: New Cellurar Automata
   m_EditorClassIdentifier: 
   _maxSteps: 1000
-  noiseDensity: 0.2
-  nbGeneration: 100
+  noiseDensity: 0.4
+  nbGeneration: 3
   CountChange: 4

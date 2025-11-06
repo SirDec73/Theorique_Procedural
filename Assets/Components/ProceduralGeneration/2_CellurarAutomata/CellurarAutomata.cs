@@ -26,8 +26,28 @@ public class CellurarAutomata : ProceduralGenerationMethod
 
     protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
     {
+        var time = DateTime.Now;
 
-        GenerateNoise();
+        for (int i = 0; i < Grid.Lenght; i++)
+        {
+            for (int j = 0; j < Grid.Width; j++)
+            {
+                bool isGround = RandomService.Chance(noiseDensity);
+                if (isGround)
+                {
+                    CreateGroundCell(i, j);
+                }
+                else
+                {
+                    CreateWaterCell(i, j);
+                }
+            }
+
+            await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+
+        }
+
+        Debug.Log($"Generation Map completed in {(DateTime.Now - time).TotalSeconds: 0.00} seconds.");
 
 
         for (int i = 0; i < nbGeneration; i++)
@@ -40,24 +60,28 @@ public class CellurarAutomata : ProceduralGenerationMethod
             {
                 for (int x = 0; x < Grid.Width; x++)
                 {
-                    (string, int, int) tile = (CheckAndAssignNewTile(x, y),x,y);
+                    (string, int, int) tile = (CheckAndGetNewTile(x, y),x,y);
                     if (IsGroundName(tile.Item2,tile.Item3,tile.Item1))
                         continue;
                     tmpGrid.Add(tile);
                 }
+
+                foreach (var tmp in tmpGrid)
+                {
+                    AssignNewType(tmp.Item2, tmp.Item3, tmp.Item1);
+                }
+
+                await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+
+                tmpGrid.Clear();
             }
 
-            foreach(var tmp in tmpGrid)
-            {
-                AssignNewType(tmp.Item2, tmp.Item3, tmp.Item1);
-            }
-
-            await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+            
         }
 
     }
 
-    private string CheckAndAssignNewTile(int x, int y)
+    private string CheckAndGetNewTile(int x, int y)
     {
 
         Dictionary<TypeTile, int> types = new Dictionary<TypeTile, int>() {
