@@ -38,5 +38,16 @@ namespace VTools.Grid
         {
             return new Vector3(Coordinates.x + _size / 2, 0, Coordinates.y + _size / 2) * _size + originPosition;
         }
+
+        public void SwapSprite(Sprite sprite)
+        {
+            SpriteRenderer sr = View.GetComponentInChildren<SpriteRenderer>();
+            sr.sprite = sprite;
+        }
+
+        public bool IsSameSprite(Sprite sprite)
+        {
+            return View.GetComponentInChildren<SpriteRenderer>().sprite == sprite;
+        }
     }
 }

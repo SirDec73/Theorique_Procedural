@@ -6,7 +6,8 @@ namespace VTools.Grid
     public class GridObjectController : MonoBehaviour
     {
         public GridObject GridObject { get; private set; }
-        
+
+
         public void Initialize(GridObject gridObject)
         {
             GridObject = gridObject;
@@ -35,5 +36,6 @@ namespace VTools.Grid
             GridObject.SetGridData(cell, grid);
             MoveTo(cell.GetCenterPosition(grid.OriginPosition));
         }
+
     }
 }

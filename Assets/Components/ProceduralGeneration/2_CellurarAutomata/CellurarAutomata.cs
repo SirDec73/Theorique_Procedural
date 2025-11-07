@@ -24,6 +24,10 @@ public class CellurarAutomata : ProceduralGenerationMethod
     [SerializeField] int nbGeneration = 4;
     [SerializeField] int CountChange = 4;
 
+
+    [SerializeField] Sprite WaterSprite;
+    [SerializeField] Sprite GrassSprite;
+
     protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
     {
         var time = DateTime.Now;
@@ -54,34 +58,30 @@ public class CellurarAutomata : ProceduralGenerationMethod
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            List <(string,int,int)> tmpGrid = new List<(string, int, int)>();
+            List <((string,Sprite),int,int)> tmpGrid = new List<((string, Sprite), int, int)>();
 
             for (int y = 0; y < Grid.Lenght; y++)
             {
                 for (int x = 0; x < Grid.Width; x++)
                 {
-                    (string, int, int) tile = (CheckAndGetNewTile(x, y),x,y);
-                    if (IsGroundName(tile.Item2,tile.Item3,tile.Item1))
+                    ((string, Sprite), int, int) tile = (CheckAndGetNewTile(x, y),x,y);
+                    if (IsGroundName(tile.Item2,tile.Item3,tile.Item1.Item1))
                         continue;
                     tmpGrid.Add(tile);
                 }
-
                 foreach (var tmp in tmpGrid)
                 {
                     AssignNewType(tmp.Item2, tmp.Item3, tmp.Item1);
                 }
-
                 await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
-
                 tmpGrid.Clear();
             }
 
-            
         }
 
     }
 
-    private string CheckAndGetNewTile(int x, int y)
+    private (string, Sprite) CheckAndGetNewTile(int x, int y)
     {
 
         Dictionary<TypeTile, int> types = new Dictionary<TypeTile, int>() {
@@ -103,16 +103,16 @@ public class CellurarAutomata : ProceduralGenerationMethod
 
         if (types[TypeTile.Ground] >= CountChange)
         {
-            return GRASS_TILE_NAME;
+            return (GRASS_TILE_NAME,GrassSprite);
         }
         else if (types[TypeTile.Water] >= CountChange)
         {
-            return WATER_TILE_NAME;
+            return (WATER_TILE_NAME,WaterSprite);
         }
         else
         {
             Grid.TryGetCellByCoordinates(x, y, out var cell);
-            return cell.GridObject.Template.Name;
+            return (cell.GridObject.Template.Name, null);
         }
 
     }
@@ -164,16 +164,24 @@ public class CellurarAutomata : ProceduralGenerationMethod
         AddTileToCell(cell, GRASS_TILE_NAME, true);
     }
 
-    void AssignNewType(int posX, int posY, string tileName)
+    void AssignNewType(int posX, int posY, (string, Sprite) tile)
     {
         Grid.TryGetCellByCoordinates(posX, posY, out var cell);
-        AddTileToCell(cell, tileName, true);
+        AddTileToCell(cell, tile.Item1, true);
+
+        //cell.SwapSprite(tile.Item2);
     }
 
     bool IsGroundName(int posX, int posY, string tileName)
     {
         Grid.TryGetCellByCoordinates(posX, posY, out var cell);
         return cell.GridObject.Template.Name == tileName;
+    }
+
+    bool IsSameSprite(int posX, int posY, Sprite tileSprite)
+    {
+        Grid.TryGetCellByCoordinates(posX, posY, out var cell);
+        return cell.IsSameSprite(tileSprite);
     }
 
 }

@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxSteps: 1000
   noiseDensity: 0.4
-  nbGeneration: 3
+  nbGeneration: 5
   CountChange: 4
+  WaterSprite: {fileID: 21300000, guid: 52fa5e8a075c61a4398859e7ccc536d8, type: 3}
+  GrassSprite: {fileID: 21300000, guid: 4a459413cbe1f5f489e91ca286eaaea3, type: 3}
