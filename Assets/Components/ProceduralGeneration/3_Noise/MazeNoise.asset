@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: MazeNoise
   m_EditorClassIdentifier: 
   _maxSteps: 1000
-  noiseType: 0
-  frequency: 0.02
-  amplitude: 0.6
-  fractalType: 3
-  nbOctave: 3
+  noiseType: 4
+  frequency: 0.0194
+  amplitude: 1
+  fractalType: 4
+  nbOctave: 4
   lacunarity: 2
-  persistance: 0.27
-  sandHeight: -1
-  grassHeight: -0.1
-  rockHeight: 0.39
+  persistance: 0.22
+  sandHeight: -0.2
+  grassHeight: 0.1
+  rockHeight: 0.79
