@@ -9,11 +9,13 @@
     - [Random Service](#random-service)
     - [Procedural Generation Method](#procedural-generation-method)
   - [Simple Room Placement](#simple-room-placement)
-  - [BSP](#BSP)
+  - [BSP](#bsp)
   - [Cellurar Automata](#cellurar-automata)
   - [Noise](#noise)
 
 </details>
+
+<br>
 
 ## Introduction
 
@@ -49,6 +51,7 @@ public bool TryGetCellByCoordinates(Vector2Int coordinates, out Cell foundCell)
 ```
 TryGetCellByCoordinates nous permet de récupérer, si elle existe, une cellule avec toute c'est donnée pour nous permettre de la modifier, récupérer des informations pour les comparer avec d'autre cellule, etc.
 
+
 ### Cell
 
 La Cell (cellule) est un bloc qui vient entré dans la grille pour la completer et la faire exister.
@@ -68,6 +71,7 @@ Le GridObject nous permet d'accèder à des informations sur la cellule comme so
 
 Le GridObjectController nous permet d'appliquer des movements aux cells comme une MoveTo avec une localisation ou une Rotation avec un angle
 
+
 ### Random Service
 
 Le RandomService est une méthode qui ce base sur un nombre (une seed) pour générer de l'aléatoire un évènement avec exactement la même seed aura toujours le même résultat à l'instant t
@@ -83,6 +87,7 @@ Range()  => Retourne un nombre dans la plage spécifié
 Chance() => Génère un nombre floatant entre 0f et 1f et retourne true si le nombre est inférieur à la probabilité (plus la probabilité est élevé, plus "true" aura de chance de sortir)
 
 Pick()   => Retourne un élément aléatoire dans une liste ou un array
+
 
 ### Procedural Generation Method
 
@@ -125,20 +130,29 @@ Vérifie si une salle rectangulaire peut rentré dans la grille
 ```csharp
 protected void AddTileToCell(Cell cell, string tileName, bool overrideExistingObjects)
 ```
-Ajoute une cellule a la grille avec le tileName, un nom de prefab dans ProceduralGenerationMethod
-**ATTENTION** cell doit être une cellule générer par la grille au start :
+Ajoute un visuel a une cell avec le tileName, un nom de prefab dans ProceduralGenerationMethod.
+
+**ATTENTION** cell doit être une cellule présente dans la grille :
 ```csharp
 if (Grid.TryGetCellByCoordinates(i, j, out var cell))
   AddTileToCell(cell, ROOM_TILE_NAME, false);
 ```
 
+<br>
+
 ## Simple Room Placement
 
+
+<br>
 
 ## BSP
 
 
+<br>
+
 ## Cellurar Automata
 
+
+<br>
 
 ## Noise
