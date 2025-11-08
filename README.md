@@ -125,7 +125,9 @@ C'est cette fonction que nous allons override pour faire notre generation proced
 ```csharp
 protected bool CanPlaceRoom(RectInt room, int spacing)
 ```
-Vérifie si une salle rectangulaire peut rentré dans la grille
+Vérifie si une salle rectangulaire avec un spacing peut rentré dans la grille.
+
+Il y a une vérification pour le dépassement de la grille mais aussi si une salle est déjà présente dans l'empalcement de la salle
 
 ```csharp
 protected void AddTileToCell(Cell cell, string tileName, bool overrideExistingObjects)
@@ -142,6 +144,63 @@ if (Grid.TryGetCellByCoordinates(i, j, out var cell))
 
 ## Simple Room Placement
 
+L'objectif de la SimpleRoomPlacement est de créer une salle de taille aléatoire et de regarder si la salle rentre dans la grille sans quel soit en conflit avec une autre salle.
+
+### GetStarted
+
+```csharp
+[CreateAssetMenu(menuName = "Procedural Generation Method/Simple Room Placement")]
+public class SimpleRoomPlacement : ProceduralGenerationMethod
+```
+Votre classe doit hériter de ProceduralGenerationMethod
+
+CreateAssetMenu pour pouvoir créer un scriptable object de cette classe
+
+```csharp
+protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
+  {
+    // Declare variables here
+    // ........
+    for (int i = 0; i < _maxSteps; i++)
+    {
+        // Check for cancellation
+        cancellationToken.ThrowIfCancellationRequested();
+
+
+        // Your algorithm here
+        // .......
+
+        int spacing = 1;
+        int minWidth = 5;
+        int maxWidth = 12;
+        int minLenght = 5;
+        int maxLenght = 12;
+
+        Vector2Int positionRoom = new Vector2Int(RandomService.Range(0, Grid.Width), RandomService.Range(0, Grid.Lenght));
+        Vector2Int sizeRoom = new Vector2Int(RandomService.Range(minWidth, maxWidth), RandomService.Range(minLenght, maxLenght));
+
+        RectInt room = new RectInt(positionRoom,sizeRoom);
+
+        if(CanPlaceRoom(room, spacing))
+        {
+            CreateRoom(room);
+        }
+
+        // Waiting between steps to see the result.
+        await UniTask.Delay(GridGenerator.StepDelay, cancellationToken : cancellationToken);
+    }
+
+    // Final ground building.
+    BuildGround();
+}
+```
+Voici un exemple simple de création de salle.
+
+On créer des coordonnées et une taille aléatoire grâce au RandomService que l'on utilise pour créer un RectInt (une salle)
+
+On vérifie si la salle passe dans la grille et si c'est le cas alors on créer la salle dans la grile
+
+Après avoir fini les steps on créer le sol avec BuildGround pour mettre du sol là où il n'y a pas de salle
 
 <br>
 
