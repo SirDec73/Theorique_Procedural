@@ -203,15 +203,21 @@ On vérifie si la salle passe dans la grille et si c'est le cas alors on créer 
 Après avoir fini les steps on créer le sol avec BuildGround pour mettre du sol là où il n'y a pas de salle
 
 <br>
-Dans le cas où l'on veut rajouter un couloir entre deux salle il est possible de le faire avec CreateCorridor(Vector2 room1, Vector2 room2)
+Dans le cas où l'on veut rajouter un couloir entre deux salle il est possible de le faire avec ``CreateCorridor(Vector2 room1, Vector2 room2)``
 
 room1 => centre de la salle numero 1
+
 room2 => centre de la salle numero 2
 
 <br>
 
 ## BSP
 
+Le BSP (Binary Split Partition) est une manière plus obtimiser de créer un donjon avec des salles.
+
+L'objectif est de séparer la grille plusieurs fois à des endroits différents pour pouvoir y insérer une salle.
+
+[Image]()
 
 <br>
 
