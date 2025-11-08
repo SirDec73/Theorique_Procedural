@@ -146,7 +146,7 @@ if (Grid.TryGetCellByCoordinates(i, j, out var cell))
 
 L'objectif de la SimpleRoomPlacement est de créer une salle de taille aléatoire et de regarder si la salle rentre dans la grille sans quel soit en conflit avec une autre salle.
 
-### GetStarted
+### Get Started
 
 ```csharp
 [CreateAssetMenu(menuName = "Procedural Generation Method/Simple Room Placement")]
@@ -203,7 +203,8 @@ On vérifie si la salle passe dans la grille et si c'est le cas alors on créer 
 Après avoir fini les steps on créer le sol avec BuildGround pour mettre du sol là où il n'y a pas de salle
 
 <br>
-Dans le cas où l'on veut rajouter un couloir entre deux salle il est possible de le faire avec ``CreateCorridor(Vector2 room1, Vector2 room2)``
+Dans le cas où l'on veut rajouter un couloir entre deux salle il est possible de le faire avec 
+`CreateCorridor(Vector2 room1, Vector2 room2)`
 
 room1 => centre de la salle numero 1
 
@@ -217,7 +218,13 @@ Le BSP (Binary Split Partition) est une manière plus obtimiser de créer un don
 
 L'objectif est de séparer la grille plusieurs fois à des endroits différents pour pouvoir y insérer une salle.
 
-[Image]()
+![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_Split.png)
+![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddRoom.png)
+![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddCorridor.png)
+
+Chaque salle son donc relier entre elle par leur séparation se qui permet de créer des couloirs plus facilement.
+
+### Get Started
 
 <br>
 
