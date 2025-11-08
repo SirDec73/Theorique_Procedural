@@ -18,9 +18,21 @@
 
 Ce github montre les bases de la génération procédural avec des exemples et un moyen de recréer des environnements simple avec différents scripts.
 
-La génération procédurale est un outil nous permettant de générer du contenu basé sur des règles simple ou complexe avec des paramètres, prédéfinis nous permettant de contrôlée l'aléatoire.
+La génération procédurale est un outil nous permettant de générer du contenu basé sur des règles simple ou complexe, avec des paramètres prédéfinis, nous permettant de contrôlée l'aléatoire.
 
 ### Grid
+
+La Grille représente notre espace de création.
+```csharp
+private readonly Cell[,] _gridArray;       
+private readonly List<Cell> _cells;
+
+public Vector3 OriginPosition { get; }
+public float CellSize { get; }
+public int Width { get; }
+public int Lenght { get; }
+public IReadOnlyList<Cell> Cells => _cells;
+```
 
 ### Cell
 
