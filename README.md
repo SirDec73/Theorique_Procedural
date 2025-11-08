@@ -34,6 +34,20 @@ public int Lenght { get; }
 public IReadOnlyList<Cell> Cells => _cells;
 ```
 
+Elle possède une taille, une origine et des Cell représentants des cellules.
+A l'initialisation, des cells vide sont créées sur l'entièreté de la grille
+
+```csharp
+public bool TryGetCellByCoordinates(Vector2Int coordinates, out Cell foundCell)
+{
+  var cellFound = TryGetCellByCoordinates(coordinates.x, coordinates.y, out Cell cell);
+  foundCell = cell;
+
+  return cellFound;
+}
+```
+TryGetCellByCoordinates nous permet de récupérer, si elle existe, une cellule avec toute c'est donnée pour nous permettre de la modifier
+
 ### Cell
 
 ### Procedural Generation Method
