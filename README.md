@@ -220,9 +220,11 @@ L'objectif est de séparer la grille plusieurs fois à des endroits différents 
 
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_Split.png)
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddRoom.png)
-![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddCorridor.png)
 
 Chaque salle son donc relier entre elle par leur séparation se qui permet de créer des couloirs plus facilement.
+
+![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_FirstCorridor.png)
+![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddCorridor.png)
 
 ### Get Started
 
