@@ -156,6 +156,7 @@ Votre classe doit hériter de ProceduralGenerationMethod
 
 CreateAssetMenu pour pouvoir créer un scriptable object de cette classe
 
+Voici un exemple simple de création de salle :
 ```csharp
 protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
   {
@@ -194,13 +195,18 @@ protected override async UniTask ApplyGeneration(CancellationToken cancellationT
     BuildGround();
 }
 ```
-Voici un exemple simple de création de salle.
 
 On créer des coordonnées et une taille aléatoire grâce au RandomService que l'on utilise pour créer un RectInt (une salle)
 
 On vérifie si la salle passe dans la grille et si c'est le cas alors on créer la salle dans la grile
 
 Après avoir fini les steps on créer le sol avec BuildGround pour mettre du sol là où il n'y a pas de salle
+
+<br>
+Dans le cas où l'on veut rajouter un couloir entre deux salle il est possible de le faire avec CreateCorridor(Vector2 room1, Vector2 room2)
+
+room1 => centre de la salle numero 1
+room2 => centre de la salle numero 2
 
 <br>
 
