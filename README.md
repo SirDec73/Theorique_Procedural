@@ -35,6 +35,7 @@ public int Lenght { get; }
 public IReadOnlyList<Cell> Cells => _cells;
 ```
 Elle possède une taille, une origine et des Cell représentants des cellules.
+
 A l'initialisation, des cells vide sont créées sur l'entièreté de la grille
 
 ```csharp
@@ -62,7 +63,9 @@ public GridObject GridObject => _object.Item1;
 public GridObjectController View => _object.Item2;
 ```
 Chaque Cell a une taille, une coordonnée ainsi qu'un GridObject et GridObjectController.
+
 Le GridObject nous permet d'accèder à des informations sur la cellule comme son nom ou son angle de rotation
+
 Le GridObjectController nous permet d'appliquer des movements aux cells comme une MoveTo avec une localisation ou une Rotation avec un angle
 
 ### Random Service
@@ -76,13 +79,14 @@ public bool  Chance(float probability)
 public T     Pick<T>(T[] array)
 ```
 Range()  => Retourne un nombre dans la plage spécifié
+
 Chance() => Génère un nombre floatant entre 0f et 1f et retourne true si le nombre est inférieur à la probabilité (plus la probabilité est élevé, plus "true" aura de chance de sortir)
+
 Pick()   => Retourne un élément aléatoire dans une liste ou un array
 
 ### Procedural Generation Method
 
-
-
+Un scriptableObject abstrait qui est la base avec laquelle on travail pour faire de la generation procedural. 
 
 ```csharp
 [Header("Generation")] 
@@ -101,6 +105,31 @@ protected const string GRASS_TILE_NAME = "Grass";
 protected const string WATER_TILE_NAME = "Water";
 protected const string ROCK_TILE_NAME = "Rock";
 protected const string SAND_TILE_NAME = "Sand";
+```
+On indique le nombre de max step/generation que l'on veut réaliser.
+
+On retrouve un RandomService, des constants pour les nom des prefabs et un ProceduralGridGenerator.
+
+Dans ProceduralGridGenerator, un enfant de BaseGridGenerator, on retrouve la seed de notre random et la grid en elle même avec une fonction pour la générer
+
+```csharp
+protected abstract UniTask ApplyGeneration(CancellationToken cancellationToken);
+```
+C'est cette fonction que nous allons override pour faire notre generation procedural.
+
+```csharp
+protected bool CanPlaceRoom(RectInt room, int spacing)
+```
+Vérifie si une salle rectangulaire peut rentré dans la grille
+
+```csharp
+protected void AddTileToCell(Cell cell, string tileName, bool overrideExistingObjects)
+```
+Ajoute une cellule a la grille avec le tileName, un nom de prefab dans ProceduralGenerationMethod
+**ATTENTION** cell doit être une cellule générer par la grille au start :
+```csharp
+if (Grid.TryGetCellByCoordinates(i, j, out var cell))
+  AddTileToCell(cell, ROOM_TILE_NAME, false);
 ```
 
 ## Simple Room Placement
