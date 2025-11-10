@@ -19,9 +19,9 @@
 
 ## Introduction
 
-Ce github montre les bases de la génération procédural avec des exemples et un moyen de recréer des environnements simple avec différents scripts.
+Ce github montre les bases de la **génération procédural** avec des exemples et un moyen de recréer des environnements simple avec différents scripts.
 
-La génération procédurale est un outil nous permettant de générer du contenu basé sur des règles simple ou complexe, avec des paramètres prédéfinis, nous permettant de contrôlée l'aléatoire.
+La génération procédurale est **un outil** nous permettant de générer du contenu basé sur **des règles simple ou complexe**, avec des paramètres prédéfinis, nous permettant de **contrôlée l'aléatoire**.
 
 ### Grid
 
@@ -74,7 +74,7 @@ Le GridObjectController nous permet d'appliquer des movements aux cells comme un
 
 ### Random Service
 
-Le RandomService est une méthode qui ce base sur un nombre (une seed) pour générer de l'aléatoire un évènement avec exactement la même seed aura toujours le même résultat à l'instant t
+Le RandomService est une méthode qui ce base sur un nombre **(une seed)** pour générer de l'aléatoire un évènement avec exactement la même seed aura toujours le même résultat à l'instant t
 
 ```csharp
 public int   Range(int minInclusive,   int maxExclusive)
@@ -214,7 +214,7 @@ room2 => centre de la salle numero 2
 
 ## BSP
 
-Le BSP (Binary Split Partition) est une manière plus obtimiser de créer un donjon avec des salles.
+Le BSP (Binary Space Partition) est une manière plus obtimiser de créer un donjon avec des salles.
 
 L'objectif est de séparer la grille plusieurs fois à des endroits différents pour pouvoir y insérer une salle.
 
@@ -232,7 +232,36 @@ Chaque salles sont relier entre elle par leur séparation se qui permet de crée
 
 ## Cellurar Automata
 
+Le Cellurar Automata est une suite de plusieurs cellule soit activé soit désactiver généré aléatoirement appelé aussi le **"White Noise"** ou **"Bruit Blanc"**
+
+Il est similaire au jeu de la vie de Conway, à chaque génération, les cellules peuvent changer d'état selon **les règles** que l'on applique.
+
+Par exemple, si une cellule désactivé et entourné de minimum 4 cellules active, alors la cellule devient elle aussi active.
+
+Il est possible de modifier active et desactive par d'autres valeurs comme des integers et modifier les règles pour changer ses valeurs et avoir si l'on fait une ile, une séparation de la mer, le sable, l'herbe, les montagnes, etc...
+
+### Get Started
+
+
 
 <br>
 
 ## Noise
+
+Le Noise est un moyen de générer pixel noir et blanc aléatoire manipulable.
+
+Il existe plusieurs type de noise comme le **"White Noise"** qui génère des pixels strictment noir ou blanc (0 ou 1).
+
+le **"Gradient Noise"** lui génère des pixels noir, blanc, gris claire, gris foncé, etc... et ses valeurs varies de 0f à 1f.
+
+Grâce au valeur récupérer on peut facilement créer un terrain avec la variation des numéros.
+
+Le **"Fractale Noise"** permet a partir du Gradient Noise d'en générer plusieurs puis de les associer entre eux pour avoir un nouveau noise.
+
+L'**"Octave"** est le nom d'un Gradient Noise utilisé utilisé par le Fractale Noise
+
+Pour garder une homogénéité entre les octaves et ne pas perdre le controle, on diminue la fréquence des prochaines octaves grâce à la **"Lacunarité"** et on baisse amplitude avec la **"Persistance"** pour garder un lien avec la première octave généré.
+
+
+
+
