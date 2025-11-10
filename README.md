@@ -12,6 +12,7 @@
   - [BSP](#bsp)
   - [Cellurar Automata](#cellurar-automata)
   - [Noise](#noise)
+  - [Remerciements](#remerciements)
 
 </details>
 
@@ -371,6 +372,7 @@ protected override async UniTask ApplyGeneration(CancellationToken cancellationT
 ```
 
 noiseDensity => Densité de l'herbe (0 => pas herbe , 1 => que de l'herbe
+
 CountChange => valeur de règle pour la modification d'une cellule
 
 Pour commencer on vient faire une boucle pour créer un White Noise avec l'aide de notre noiseDensity.
@@ -379,7 +381,7 @@ Puis on boucle sur le nombre de génération où l'on vient appliquer notre règ
 
 **ATTENTION** 
 
-Dans cette exemple chaque génération de ligne vient impacter la suite pendant la génération.
+Dans cette exemple, chaque génération de ligne vient impacter directement les lignes suivantes pendant cette même génération.
 
 Si vous ne souhaitez pas que cela arrive :
 1. Déplacer ``List <((string,Sprite),int,int)> tmpGrid = new List<((string, Sprite), int, int)>();`` au dessus de la boucle de génération
@@ -394,7 +396,7 @@ Le Noise est un moyen de générer pixel noir et blanc aléatoire manipulable.
 
 Il existe plusieurs type de noise comme le **"White Noise"** qui génère des pixels strictment noir ou blanc (0 ou 1).
 
-le **"Gradient Noise"** lui génère des pixels noir, blanc, gris claire, gris foncé, etc... et ses valeurs varies de 0f à 1f.
+le **"Gradient Noise"** lui génère des pixels noir, blanc, gris claire, gris foncé, etc..., ses valeurs varies de 0f à 1f et peut être comparer à des ondes.
 
 Grâce au valeur récupérer on peut facilement créer un terrain avec la variation des numéros.
 
@@ -406,5 +408,106 @@ Pour garder une homogénéité entre les octaves et ne pas perdre le controle, o
 
 ### Get Started
 
+```csharp
+[CreateAssetMenu(menuName = "Procedural Generation Method/Noise")]
+public class Noise : ProceduralGenerationMethod
+```
+Votre classe doit hériter de ProceduralGenerationMethod
+
+CreateAssetMenu pour pouvoir créer un scriptable object de cette classe
+
+```csharp
+public class Noise : ProceduralGenerationMethod
+{
+    protected FastNoiseLite noise;
+
+    [Header("NOISE DATA")]
+    [SerializeField]                        protected FastNoiseLite.NoiseType noiseType;
+    [SerializeField, Range(0.001f, 0.1f)]   protected float frequency = 0.010f;
+    [SerializeField, Range(0.001f, 2f)]     protected float amplitude = 1f;
+
+    [Header("FRACTAL NOISE")]
+    [SerializeField]                        protected FastNoiseLite.FractalType fractalType;
+    [SerializeField, Range(1, 10)]          protected int nbOctave = 1;
+    [SerializeField, Range(0.01f, 10f)]     protected float lacunarity = 2f;
+    [SerializeField, Range(0.001f, 10f)]    protected float persistance = 0.5f;
+
+    [Header("HEIGHTS")]
+    [SerializeField, Range(-1f, 1f)]        protected float sandHeight = -0.2f;
+    [SerializeField, Range(-1f, 1f)]        protected float grassHeight = 0f;
+    [SerializeField, Range(-1f, 1f)]        protected float rockHeight = 0.6f;
+
+    protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        noise = SetupNoise();
+
+        // Gather noise data
+        float noiseData;
+
+        for (int x = 0; x < Grid.Lenght; x++)
+        {
+            for (int y = 0; y < Grid.Width; y++)
+            {
+                noiseData = GetNoiseData(x, y);
+
+                string type;
+                if (noiseData >= rockHeight)
+                {
+                    type = ROCK_TILE_NAME;
+                }
+                else if (noiseData >= grassHeight)
+                {
+                    type = GRASS_TILE_NAME;
+                }
+                else if (noiseData >= sandHeight)
+                {
+                    type = SAND_TILE_NAME;
+                }
+                else 
+                { 
+                    type = WATER_TILE_NAME;
+                }
+
+                AssignNewType(x,y, type);
+            }
+            await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+        }
+    }
+```
+
+noiseType => Type de bruit de base
+
+frequency => Fais varier la taille des motifs
+
+amplitude => Fais varier la hauteur des ondes
+
+
+fractalType => Type des octaves
+
+nbOctave => Nombre d'octace appliqué
+
+lacunarity => Fais varier la fréquence des prochaines octaves
+
+persistance => Diminue l'amplitude des octaves
+
+
+sandHeight => Hauteur du début d'apparition du sable
+
+grassHeight => Hauteur du début d'apparition de l'herbe
+
+rockHeight => Hauteur du début d'apparition du montagne
+
+Ce qui se trouve en dessous de sandHeight, c'est de l'eau 
+
+On commence par Setup le Noise avec les paramètres renseignés ``noise = SetupNoise();`` qu'on vient renseigner dans une grille.
+
+Puis selon la valeur dans la grille on vient appliquer un élément (Water, Sand, Grass, Rock)
+
+
+## Remerciements
+
+Je tiens à remercier RUTKOWSKI Yona, pour m'avoir enseigner (à moi et à toutes ma promotion) les grandes bases de génération procédurale !
 
 
