@@ -152,6 +152,7 @@ L'objectif de la SimpleRoomPlacement est de créer une salle de taille aléatoir
 [CreateAssetMenu(menuName = "Procedural Generation Method/Simple Room Placement")]
 public class SimpleRoomPlacement : ProceduralGenerationMethod
 ```
+
 Votre classe doit hériter de ProceduralGenerationMethod
 
 CreateAssetMenu pour pouvoir créer un scriptable object de cette classe
@@ -203,8 +204,8 @@ On vérifie si la salle passe dans la grille et si c'est le cas alors on créer 
 Après avoir fini les steps on créer le sol avec BuildGround pour mettre du sol là où il n'y a pas de salle
 
 <br>
-Dans le cas où l'on veut rajouter un couloir entre deux salle il est possible de le faire avec 
-`CreateCorridor(Vector2 room1, Vector2 room2)`
+
+Dans le cas où l'on veut rajouter un couloir entre deux salle il est possible de le faire avec : ``CreateCorridor(Vector2 room1, Vector2 room2)``
 
 room1 => centre de la salle numero 1
 
@@ -218,6 +219,8 @@ Le BSP (Binary Space Partition) est une manière plus obtimiser de créer un don
 
 L'objectif est de séparer la grille plusieurs fois à des endroits différents pour pouvoir y insérer une salle.
 
+Ces séparations donne des Childs puis des Leafs si il s'agit du dernière enfants
+
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_Split.png)
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddRoom.png)
 
@@ -227,6 +230,66 @@ Chaque salles sont relier entre elle par leur séparation se qui permet de crée
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddCorridor.png)
 
 ### Get Started
+
+```csharp
+[CreateAssetMenu(menuName = "Procedural Generation Method/Binary Space Partition")]
+public class BinarySpacePartition : ProceduralGenerationMethod
+```
+
+Votre classe doit hériter de ProceduralGenerationMethod
+
+CreateAssetMenu pour pouvoir créer un scriptable object de cette classe
+
+```csharp
+protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
+{
+    List<BSP_Node> nodes = new List<BSP_Node>();
+
+    cancellationToken.ThrowIfCancellationRequested();
+
+    RectInt rectInt = new RectInt(0,0,Grid.Width,Grid.Lenght);
+
+    BSP_Node Root = new BSP_Node(minSize, rectInt, RandomService);
+
+
+    Debug.Log("=== GenerateNodes ===");
+    GenerateNodes(_partition,Root);
+
+
+    Debug.Log("=== GenerateRooms ===");
+    GenerateNodesRooms(Root);
+    await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+
+
+    Debug.Log("=== GenerateCorridor ===");
+    GenerateNodesCorridor(Root);
+
+
+    await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+
+
+    BuildGround();
+}
+```
+
+Tout d'abord on vient créer notre Node racine : ``BSP_Node Root = new BSP_Node(minSize, rectInt, RandomService);``
+
+C'est à partir de cette Node que nous allons pouvoir la séparer et créer des enfants.
+
+Ensuite on vient Générer les nodes : ``GenerateNodes(_partition,Root);``
+
+Cette fonction vient récursivement séparer les Nodes pour en créer de nouvelle qui vont elle même se faire séparer un nombre de fois égal à _partition;
+
+Ensuite on vient Générer les salles : ``GenerateNodesRooms(Root);``
+
+On vient récursivement récupérer les Leafs pour créer des salles adaptées à des paramètres comme la taille minimum ou maximum de la salle ou spacing pour éviter que les salles soit collées entre elle.
+
+Pour finir on vient ajouter les couloirs des salles : ``GenerateNodesCorridor(Root);``
+
+La fonction vient récursivement récupérer les parents des Leafs pour relier le centre des 2 Leafs entre elle par un couloir.
+
+Le couloir est créer en 2 parties (horizontale et verticale) et l'ordre d'appel de ces 2 parties est tirer aléatoirement.
+
 
 <br>
 
@@ -242,7 +305,86 @@ Il est possible de modifier active et desactive par d'autres valeurs comme des i
 
 ### Get Started
 
+```csharp
+[CreateAssetMenu(menuName = "Procedural Generation Method/Cellurar Automata")]
+public class CellurarAutomata : ProceduralGenerationMethod
+```
 
+Votre classe doit hériter de ProceduralGenerationMethod
+
+CreateAssetMenu pour pouvoir créer un scriptable object de cette classe
+
+```csharp
+[SerializeField] float noiseDensity = 0.5f;
+[SerializeField] int nbGeneration = 4;
+[SerializeField] int CountChange = 4;
+
+protected override async UniTask ApplyGeneration(CancellationToken cancellationToken)
+{
+    var time = DateTime.Now;
+
+    for (int i = 0; i < Grid.Lenght; i++)
+    {
+        for (int j = 0; j < Grid.Width; j++)
+        {
+            bool isGround = RandomService.Chance(noiseDensity);
+            if (isGround)
+            {
+                CreateGroundCell(i, j);
+            }
+            else
+            {
+                CreateWaterCell(i, j);
+            }
+        }
+
+        await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+
+    }
+
+    Debug.Log($"Generation Map completed in {(DateTime.Now - time).TotalSeconds: 0.00} seconds.");
+
+    for (int i = 0; i < nbGeneration; i++)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        List <((string,Sprite),int,int)> tmpGrid = new List<((string, Sprite), int, int)>();
+
+        for (int y = 0; y < Grid.Lenght; y++)
+        {
+            for (int x = 0; x < Grid.Width; x++)
+            {
+                ((string, Sprite), int, int) tile = (CheckAndGetNewTile(x, y),x,y);
+                if (IsGroundName(tile.Item2,tile.Item3,tile.Item1.Item1))
+                    continue;
+                tmpGrid.Add(tile);
+            }
+            foreach (var tmp in tmpGrid)
+            {
+                AssignNewType(tmp.Item2, tmp.Item3, tmp.Item1);
+            }
+            await UniTask.Delay(GridGenerator.StepDelay, cancellationToken: cancellationToken);
+            tmpGrid.Clear();
+        }
+    }
+}
+```
+
+noiseDensity => Densité de l'herbe (0 => pas herbe , 1 => que de l'herbe
+CountChange => valeur de règle pour la modification d'une cellule
+
+Pour commencer on vient faire une boucle pour créer un White Noise avec l'aide de notre noiseDensity.
+
+Puis on boucle sur le nombre de génération où l'on vient appliquer notre règle de CountChange qui s'effectue dans ``CheckAndGetNewTile(x, y)``
+
+**ATTENTION** 
+
+Dans cette exemple chaque génération de ligne vient impacter la suite pendant la génération.
+
+Si vous ne souhaitez pas que cela arrive :
+1. Déplacer ``List <((string,Sprite),int,int)> tmpGrid = new List<((string, Sprite), int, int)>();`` au dessus de la boucle de génération
+2. Déplacer la boucle foreach en dessous de la boucle de génération
+3. Retirer le nétoyage de la grille ``tmpGrid.Clear();``
 
 <br>
 
@@ -262,6 +404,7 @@ L'**"Octave"** est le nom d'un Gradient Noise utilisé utilisé par le Fractale 
 
 Pour garder une homogénéité entre les octaves et ne pas perdre le controle, on diminue la fréquence des prochaines octaves grâce à la **"Lacunarité"** et on baisse amplitude avec la **"Persistance"** pour garder un lien avec la première octave généré.
 
+### Get Started
 
 
 
