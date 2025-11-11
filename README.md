@@ -485,6 +485,7 @@ frequency => Fais varier la taille des motifs.
 
 Amplitude => Fais varier la hauteur des ondes.
 
+
 fractalType => Type des octaves
 
 nbOctave => Nombre d'octave appliqué
@@ -493,11 +494,13 @@ lacunarity => Fais varier la fréquence des prochaines octaves.
 
 persistance Diminue l'amplitude des octaves.
 
+
 sandHeight => Hauteur du début d'apparition du sable
 
 grassHeight => Hauteur du début d'apparition de l'herbe
 
 rockHeight => Hauteur du début d'apparition de la montagne
+
 
 Ce qui se trouve en dessous de sandHeight, c'est de l'eau. 
 
