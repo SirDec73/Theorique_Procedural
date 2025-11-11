@@ -223,13 +223,11 @@ L'objectif est de séparer la grille plusieurs fois à des endroits différents 
 Ces séparations donnent des Childs, puis des Leafs s'il s'agit du dernier enfant.
 
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_Split.png)
-
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddRoom.png)
 
 Chaque salle est reliée entre elle par sa séparation, ce qui permet de créer des couloirs plus facilement.
 
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_FirstCorridor.png)
-
 ![image](https://github.com/SirDec73/Theorique_Procedural/blob/main/ImageGit/BSP_AddCorridor.png)
 
 ### Get Started
